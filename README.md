@@ -32,8 +32,8 @@ An intelligent application that generates customized cover letters using NVIDIA'
 
 1. **Clone the repository**
    ```bash
-   git clone <repository-url>
-   cd job-application-automation
+   https://github.com/Srivathsav-max/AI-Cover-Letter-Generator.git
+   cd AI-Cover-Letter-Generator
    ```
 
 2. **Create and activate virtual environment (recommended)**
@@ -48,6 +48,7 @@ An intelligent application that generates customized cover letters using NVIDIA'
    ```
 
 4. **Set up environment variables**
+   Create a Account at [Nvidia](https://build.nvidia.com/) So you will get 2000 Inferance Calls with a Normal Mail and Extra 3000 Inferance calls with Business Mail
    Create a `.env` file in the root directory with:
    ```
    NVIDIA_API_BASE_URL=https://integrate.api.nvidia.com/v1
