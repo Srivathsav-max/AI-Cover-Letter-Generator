@@ -1,7 +1,7 @@
 import streamlit as st
 from .pdf_utils import extract_text_from_pdf, convert_text_to_pdf
 from .llm_utils import build_cover_letter_prompt, generate_cover_letter_llm
-from .text_utils import sanitize_cover_letter_text
+from .text_utils import sanitize_cover_letter_text, extract_company_name
 
 def init_session_state():
     if 'cover_letter_generated' not in st.session_state:
@@ -10,6 +10,19 @@ def init_session_state():
         st.session_state.cover_letter_content = ""
     if 'pdf_generated' not in st.session_state:
         st.session_state.pdf_generated = False
+    if 'company_name' not in st.session_state:
+        st.session_state.company_name = ""
+
+def format_filename(company_name):
+    # Remove any special characters and extra spaces
+    clean_name = ''.join(e for e in company_name if e.isalnum() or e.isspace())
+    # Split by spaces and capitalize each word
+    words = clean_name.strip().split()
+    if not words:
+        return "Cover_Letter.pdf"
+    # Capitalize first letter of each word and join with underscore
+    formatted_name = '_'.join(word.capitalize() for word in words)
+    return f"{formatted_name}_Cover_Letter.pdf"
 
 def render_ui():
     st.markdown(
@@ -50,7 +63,7 @@ def render_ui():
         if not job_description.strip():
             st.warning("Please paste a job description.")
             return
-
+            
         resume_text = extract_text_from_pdf(uploaded_file)
         prompt = build_cover_letter_prompt(resume_text, job_description, address)
 
@@ -58,6 +71,8 @@ def render_ui():
         cover_letter_raw = generate_cover_letter_llm(prompt)
         if cover_letter_raw:
             cover_letter_clean = sanitize_cover_letter_text(cover_letter_raw)
+            company_name = extract_company_name(cover_letter_clean)
+            st.session_state.company_name = company_name
             st.session_state.cover_letter_content = cover_letter_clean
             st.session_state.cover_letter_generated = True
             st.session_state.pdf_generated = False
@@ -90,10 +105,11 @@ def render_ui():
                     st.error(f"Failed to generate PDF: {str(e)}")
 
         if st.session_state.pdf_generated:
+            filename = format_filename(st.session_state.company_name)
             st.download_button(
                 label="Download Cover Letter as PDF",
                 data=st.session_state.pdf_bytes,
-                file_name="cover_letter.pdf",
+                file_name=filename,
                 mime="application/pdf"
             )
 
