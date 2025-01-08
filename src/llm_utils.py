@@ -4,40 +4,50 @@ from .config import client, MODEL_NAME
 
 def build_cover_letter_prompt(resume_text, job_description, address=""):
     current_date = datetime.now().strftime("%B %d, %Y")
-    address_instruction = "Company Address (on its own line)." if address else ""
     
     prompt = f"""
-    You are a professional cover letter writer with 20 years of experience. with lots of achievents in writing cover letter.
-    memorize all the informations and use them to write the cover letter according to every rule it need to follow.
+            You are an experienced cover letter writer with 20 years of expertise, known for creating highly impactful and personalized cover letters. Your goal is to craft a compelling and professional cover letter that aligns with the candidate's resume, technical skills, and achievements while directly addressing the requirements and values outlined in the job description.
 
-    Create a structured cover letter with these exact lines for the header:
-    1) My Name (on its own line, first letter of each word capitalized and complete name need to be bold).
-    2) My Email (on its own line in proper formate like Email: [Email Address]).
-    3) My Phone Number (on its own line in proper formate like Phone: [Phone Number]).
-    new line
-    4) Date: {current_date}
-    new line
-    5) Company Name (on its own line).
-    {f"6) Company Address (on its own line)." if address else ""}
-    new line
-    7) A greeting line, e.g. "Dear Hiring Manager," or "Dear <Name>," on its own line.
+            Memorize all the information provided in the resume and job description to create a cohesive narrative that showcases the candidate's qualifications, enthusiasm, and fit for the role. Adhere to all standard cover letter rules, formatting requirements, and professional tone guidelines.
 
-    After the greeting, produce multiple paragraphs (separated by exactly one blank line)
-    for the introduction, main body, and conclusion. Conclude with:
-    - "Sincerely," on a line by itself
-    - My typed name (on the next line)
+            **Header:**
+            1) Candidate's Full Name (formatted as bold text, with each word capitalized, on its own line).
+            2) Candidate's Email (formatted as: Email: [email_address],formatted as bold text, on its own line).
+            3) Candidate's Phone Number (formatted as: Phone: [phone_number],formatted as bold text, on its own line).
+            new line
+            4) Date (formatted as: Date: {current_date}, on its own line).
+            new line
+            5) Company Name (extracted from the job description and written clearly on its own line).
+            new line
+            {f"6) Company Address (on its own line)." if address else ""}
+            7) Greeting Line (choose the appropriate greeting based on the job description, e.g., "Dear Hiring Manager," or "Dear [Specific Name],").
+            **Body:**
+            1) Introduction (1 paragraph): A concise and engaging opening that highlights why the candidate is excited about the role and company. Mention the specific position and briefly touch on how their skills and experiences align with the job description.
 
-    Total length: 150-250 words.
+            2) Main Body (1 paragraph): Expand on key achievements, skills, and experiences from the resume that are relevant to the job description. Emphasize how the candidate's background can address the company's needs or solve specific challenges. Use metrics or quantifiable results where possible.
 
-    JOB DESCRIPTION:
-    --------------------
-    {job_description}
-    --------------------
+            3) Conclusion (1 paragraph): Reiterate enthusiasm for the role, express interest in contributing to the company, and include a call to action (e.g., willingness to discuss further in an interview). 
 
-    RESUME:
-    --------------------
-    {resume_text}
-    --------------------
+            **Closing:**
+            - "Sincerely," on its own line.
+            - Candidate's Full Name (typed, on the next line).
+
+            **Total Length:** 150–250 words.
+
+            **Instructions:**
+            - Tailor the language and content to reflect the tone and keywords of the job description.
+            - Focus on relevance, clarity, and professionalism.
+            - Ensure seamless integration of details from the resume into the narrative.
+
+            **Job Description:**
+            --------------------
+            {job_description}
+            --------------------
+
+            **Resume:**
+            --------------------
+            {resume_text}
+            --------------------
     """
     return prompt.strip()
 
